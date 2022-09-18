@@ -1,20 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { BottomNavigation, Text } from 'react-native-paper';
 
-export default function App() {
+const MainRoute = () => <Text>Music</Text>;
+
+const StatisticsRoute = () => <Text>Recents</Text>;
+
+const AccountRoute = () => <Text>Accounts</Text>;
+
+const AboutRoute = () => <Text>Notifications</Text>;
+
+const MyComponent = () => {
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'main', title: 'Main', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
+    { key: 'statistics', title: 'Statistics', focusedIcon: 'chart-bar', unfocusedIcon: 'chart-bar-stacked' },
+    { key: 'account', title: 'Account', focusedIcon: 'account', unfocusedIcon: 'account-outline' },
+    { key: 'about', title: 'About', focusedIcon: 'bell', unfocusedIcon: 'bell-outline' },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    main: MainRoute,
+    statistics: StatisticsRoute,
+    account: AccountRoute,
+    about: AboutRoute,
+  });
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <BottomNavigation
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      renderScene={renderScene}
+    />
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default MyComponent;
