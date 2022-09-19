@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { BottomNavigation, Text } from 'react-native-paper';
+import AboutScreen from './Components/AboutScreen'
 
 const MainRoute = () => <Text>Music</Text>;
 
@@ -7,7 +8,7 @@ const StatisticsRoute = () => <Text>Recents</Text>;
 
 const AccountRoute = () => <Text>Accounts</Text>;
 
-const AboutRoute = () => <Text>Notifications</Text>;
+const AboutRoute = () => <AboutScreen/>;
 
 const MyComponent = () => {
   const [index, setIndex] = React.useState(0);
