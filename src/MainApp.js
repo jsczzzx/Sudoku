@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BottomNavigation, Text } from 'react-native-paper';
-import AboutScreen from './Screens/AboutScreen'
+import AboutScreen from './screens/AboutScreen'
 
 const MainRoute = () => <Text>Music</Text>;
 
