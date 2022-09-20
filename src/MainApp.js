@@ -1,8 +1,20 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import { BottomNavigation, Text } from 'react-native-paper';
-import AboutScreen from './screens/AboutScreen'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AboutScreen from './screens/AboutScreen';
+import Grid from './components/Grid';
+import Axios from 'axios';
+import * as easyData from './components/easyData.json';
 
-const MainRoute = () => <Text>Music</Text>;
+
+const MainRoute = () => {
+
+
+  return (
+  <SafeAreaView>
+    <Grid vals={easyData.sudokuList[0]} userName='Somebody' mode="easy"/>
+  </SafeAreaView>
+)};
 
 const StatisticsRoute = () => <Text>Recents</Text>;
 
