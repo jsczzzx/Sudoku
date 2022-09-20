@@ -2,6 +2,8 @@ import 'react-native-gesture-handler';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import theme from './src/theme/theme';
 import MainApp from './src/MainApp';
 import StartScreen from './src/screens/StartScreen';
 import LoginScreen from './src/screens/LoginScreen';
@@ -44,8 +46,10 @@ const MyStack = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <MyStack />
-    </NavigationContainer>
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <MyStack />
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
