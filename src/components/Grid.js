@@ -1,87 +1,12 @@
 import React, { useState, useEffect, useRef, createRef, setState, useContext, createContext,AsyncStorage } from "react"
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableHighlight } from 'react-native';
 import ValueProvider, {useValue} from './ValueContext';
 
 
 
-const Cell = ({id0, id1, id2, id3}) => {
-  const inputRef = React.createRef()
-  const value = useValue();
-  const vals = value.vals;
-  const isRed = value.isRed;
-  const update = value.update;
 
-
-  let x = 3*id0+id2, y = 3*id1+id3;
-  return (
-
-    <View style={isRed[x][y] ? styles.CellRed : styles.CellBlue}>
-      {vals[x][y] == "" ? 
-      <TextInput
-        ref={inputRef}
-        style={{height: 28, width: 28, fontSize: 22, color: 'blue', textAlign: 'center'}}
-        maxLength = {1}
-        onChangeText = {(text) => {
-          if ((text > 0 && text <= 9) || text == "") {
-            update(x, y, text);
-          } else {
-            inputRef.current.clear()
-          }
-        }}
-      > 
-      </TextInput>
-      : <Text style={{fontSize:22}}>{vals[3*id0+id2][3*id1+id3]}</Text>}
-      
-    </View>  
-  )
-}
-
-
-const Row = ({id0, id1, id2}) => {
-  return (
-    <View style={styles.Row}>
-      <Cell id0={id0} id1={id1} id2={id2} id3={0}/>
-      <Cell id0={id0} id1={id1} id2={id2} id3={1}/>
-      <Cell id0={id0} id1={id1} id2={id2} id3={2}/>
-    </View>
-  )
-}
-
-
-const SmallGrid = ({id0, id1}) => {
-  return (
-    <View style={styles.smallGrid}>
-      <Row id0={id0} id1={id1} id2={0}/>
-      <Row id0={id0} id1={id1} id2={1}/>
-      <Row id0={id0} id1={id1} id2={2}/>
-    </View>
-  )
-}
-
-const GridRow = ({id}) => {
-  return (
-    <View style={styles.gridRow}>
-      <SmallGrid id0={id} id1={0}/>
-      <SmallGrid id0={id} id1={1}/>
-      <SmallGrid id0={id} id1={2}/>
-    </View>
-  )
-}
-
-const LargeGrid = () => {
-  return (
-    <View style={styles.largeGrid}>
-      <GridRow id={0}/>
-      <GridRow id={1}/>
-      <GridRow id={2}/>
-    </View>
-  )
-}
 
 const Grid = ({vals, userName, mode}) => {
-
-
-
 
   let copy = new Array(9).fill("").map(() => new Array(9).fill(""));
   for (var i = 0; i < 9; i++) {
@@ -185,8 +110,93 @@ const Grid = ({vals, userName, mode}) => {
         }
       }
     }
-
   }
+
+  const Cell = ({id0, id1, id2, id3}) => {
+    const inputRef = React.createRef()
+    const value = useValue();
+    const vals = value.vals;
+    const isRed = value.isRed;
+    const update = value.update;
+  
+  
+    let x = 3*id0+id2, y = 3*id1+id3;
+    return (
+      <TouchableHighlight onPress = {() => {
+        let copy = [...isRed];
+        copy[x][y]++;
+        setIsRed(copy);
+      }}>
+  
+      <View style={isRed[x][y] ? styles.CellRed : styles.CellBlue}>
+        {vals[x][y] == "" ? 
+        <Text/>
+        : <Text style={{fontSize:22}}>{vals[3*id0+id2][3*id1+id3]}</Text>
+        /*<TextInput
+          ref={inputRef}
+          style={{height: 28, width: 28, fontSize: 22, color: 'blue', textAlign: 'center'}}
+          maxLength = {1}
+          onChangeText = {(text) => {
+            if ((text > 0 && text <= 9) || text == "") {
+              update(x, y, text);
+            } else {
+              inputRef.current.clear()
+            }
+          }}
+        > 
+        </TextInput>
+        : <Text style={{fontSize:22}}>{vals[3*id0+id2][3*id1+id3]}</Text>*/
+      }
+        
+      </View>  
+      </TouchableHighlight>
+  
+    )
+  }
+  
+  
+  const Row = ({id0, id1, id2}) => {
+    return (
+      <View style={styles.Row}>
+        <Cell id0={id0} id1={id1} id2={id2} id3={0}/>
+        <Cell id0={id0} id1={id1} id2={id2} id3={1}/>
+        <Cell id0={id0} id1={id1} id2={id2} id3={2}/>
+      </View>
+    )
+  }
+  
+  
+  const SmallGrid = ({id0, id1}) => {
+    return (
+      <View style={styles.smallGrid}>
+        <Row id0={id0} id1={id1} id2={0}/>
+        <Row id0={id0} id1={id1} id2={1}/>
+        <Row id0={id0} id1={id1} id2={2}/>
+      </View>
+    )
+  }
+  
+  const GridRow = ({id}) => {
+    return (
+      <View style={styles.gridRow}>
+        <SmallGrid id0={id} id1={0}/>
+        <SmallGrid id0={id} id1={1}/>
+        <SmallGrid id0={id} id1={2}/>
+      </View>
+    )
+  }
+  
+  const LargeGrid = () => {
+    return (
+      <View style={styles.largeGrid}>
+        <GridRow id={0}/>
+        <GridRow id={1}/>
+        <GridRow id={2}/>
+      </View>
+    )
+  }
+
+
 
   return (
 
