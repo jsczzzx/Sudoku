@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef, createRef, setState, useContext, createContext,AsyncStorage } from "react"
-import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
-import Timer from './Timer';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import ValueProvider, {useValue} from './ValueContext';
-import Axios from 'axios';
 
-const url = "https://secure-earth-67171.herokuapp.com";
 
 
 const Cell = ({id0, id1, id2, id3}) => {
@@ -83,98 +80,7 @@ const LargeGrid = () => {
 
 const Grid = ({vals, userName, mode}) => {
 
-  const storeData = async (value) => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@sudoku_best');
-      if (jsonValue == null) {
-        await AsyncStorage.setItem('@sudoku_best', JSON.stringify(value));
-        console.log('just stored ' + value);
-      } else {
-        var data = JSON.parse(jsonValue);
-        //alert(data.userName);
-        //alert(jsonValue);
-        //alert(data.userName);
-        //alert(value.userName);
-        if (value.time <= data.time) {
-          await AsyncStorage.setItem('@sudoku_best', JSON.stringify(value));
-          console.log('just stored '+ jsonValue);
-        }
-        //const jsonValue = JSON.stringify(value)
-      }
 
-    } catch (e) {
-      console.log("error in storeData ");
-      console.dir(e);
-      // saving error
-    }
-  }
-
-  const storeData2 = async (value) => {
-    try {
-      let userName = value.userName;
-      let timeText = value.timeText;
-      const jsonValue = await AsyncStorage.getItem('@sudoku_scores');
-      if (jsonValue == null) {
-        var data = [{
-          userName: userName,
-          time: time,
-          timeText: timeText
-        }]      
-        await AsyncStorage.setItem('@sudoku_scores', JSON.stringify(data));
-        console.log('just stored ' + value);
-      } else {
-        var data = JSON.parse(jsonValue);
-        var curData = {
-          userName: userName,
-          time: time,
-          timeText: timeText
-        };
-        var newData = [...data, curData];
-        await AsyncStorage.setItem('@sudoku_scores', JSON.stringify(newData));
-        console.log('just stored '+ jsonValue);
-        //const jsonValue = JSON.stringify(value)
-      }
-
-    } catch (e) {
-      console.log("error in storeData ");
-      console.dir(e);
-      // saving error
-    }
-  }
-
-  const clearAll = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch(e) {
-      console.dir(e);
-    }
-  }
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@sudoku_best');
-      let data = null;
-      if (jsonValue!=null) {
-        data = JSON.parse(jsonValue);
-        setBestPerson(data.userName);
-        setBestTime(data.time);
-        //alert(jsonValue);
-        console.log('just set Info, Correct and Answered');
-      } else {
-        console.log('just read a null value from Storage');
-      }
-    } catch(e) {
-      console.log("error in getData ");
-      console.dir(e);
-      // error reading value
-    }
-  }
-
-
-/*useEffect(() => {
-  clearAll();
-},[])*/
-  
 
 
   let copy = new Array(9).fill("").map(() => new Array(9).fill(""));
@@ -193,12 +99,6 @@ const Grid = ({vals, userName, mode}) => {
   const [bestTime, setBestTime] = useState("NA");
   const [isFinished, setIsFinished] = useState(false);
 
-
-
-
-  const updateTime = (time) => {
-    setTime(time);
-  }
 
 
   const update = (x, y, val) => {
@@ -288,66 +188,17 @@ const Grid = ({vals, userName, mode}) => {
 
   }
 
-  const updateSelected = (x, y) => {
-    setCurX(x);
-    setCurY(y);
-  }
-
-
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-      <View >
-        {isFinished ? <Text>N/A</Text> : <Timer updateTime={updateTime}/>}
-      </View>
-      <View>
+
       <ValueProvider
         value={{vals, isRed, update}} >  
         <LargeGrid/>
       </ValueProvider>
-      </View>
-      <View>
-        <View >
-          <Button color="blue" 
-           title="SUBMIT" 
-            onPress={() => {
-              let isValid = true;
-              for (var i = 0; i < 9; i++) {
-                for (var j = 0; j < 9; j++) {
-                  if (isRed[i][j] != 0 || userVals[i][j] == "") {
-                    isValid = false;
-                    break;
-                  }
-                }
-              }
-              if (isValid) {
-                alert("Congratulations!\nYou finish in " + time + " s!");
-                setIsFinished(true);
-                let timeText = (parseInt(time / 60) < 10 ? "0" + parseInt(time / 60) : parseInt(time % 60)) + ":" + ((time % 60) < 10 ? "0" + time % 60 : time % 60);
-                AsyncStorage.getItem('@name')
-                  .then((userName) => {
-                    const data = {name:userName, time:time};
-                    if (mode == "easy") {
-                      Axios.post(url+'/submit',data);
-                    } else if (mode == "hard") {
-                      Axios.post(url+'/submithard',data);
-                    }
-                  })
-              } else {
-                alert("Failed");
-              }
-            }}>
-          </Button>
-        </View>
-      </View>
 
-    </KeyboardAvoidingView >
   );
 }
 
 export default Grid;
-
 
 const styles = StyleSheet.create({
   container: {
