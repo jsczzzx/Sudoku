@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, createRef, setState, useContext, createContext,AsyncStorage } from "react"
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableHighlight } from 'react-native';
 import ValueProvider, {useValue} from './ValueContext';
+import Button from './Button';
+import {IconButton} from 'react-native-paper';
+import {withTheme} from 'react-native-paper'
 
 
 
 
-
-const Grid = ({vals, userName, mode}) => {
+const Grid = ({theme, vals, userName, mode}) => {
 
   let copy = new Array(9).fill("").map(() => new Array(9).fill(""));
   for (var i = 0; i < 9; i++) {
@@ -112,6 +114,20 @@ const Grid = ({vals, userName, mode}) => {
     }
   }
 
+  const RoundButton = (props) => {
+    return (
+      <IconButton
+        style={{
+          width: '100%',
+        }}
+        icon={props.type}
+        iconColor= {props.isDelete ? theme.colors.error : theme.colors.primary}
+        size={40}
+        onPress={() => console.log('Pressed')}
+      />
+    )
+  }
+
   const Cell = ({id0, id1, id2, id3}) => {
     const inputRef = React.createRef()
     const value = useValue();
@@ -188,10 +204,26 @@ const Grid = ({vals, userName, mode}) => {
   
   const LargeGrid = () => {
     return (
+      <View>
       <View style={styles.largeGrid}>
         <GridRow id={0}/>
         <GridRow id={1}/>
         <GridRow id={2}/>
+      </View>
+      <View style={{flexDirection:'row', justifyContent: 'center'}}>
+        <RoundButton type='numeric-1-circle-outline'/>
+        <RoundButton type='numeric-2-circle-outline'/>
+        <RoundButton type='numeric-3-circle-outline'/>
+        <RoundButton type='numeric-4-circle-outline'/>
+        <RoundButton type='numeric-5-circle-outline'/>
+      </View>
+      <View style={{flexDirection:'row', justifyContent: 'center'}}>
+        <RoundButton type='numeric-6-circle-outline'/>
+        <RoundButton type='numeric-7-circle-outline'/>
+        <RoundButton type='numeric-8-circle-outline'/>
+        <RoundButton type='numeric-9-circle-outline'/>
+        <RoundButton type='arrow-collapse-left' isDelete={true}/>
+      </View>
       </View>
     )
   }
@@ -208,7 +240,7 @@ const Grid = ({vals, userName, mode}) => {
   );
 }
 
-export default Grid;
+export default withTheme(Grid);
 
 const styles = StyleSheet.create({
   container: {
