@@ -26,7 +26,7 @@ const Background = ({theme, children }) => {
       resizeMode="repeat"
       style={styles.background}
     >
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardShouldPersistTaps={'always'}>
         {children}
       </KeyboardAvoidingView>
     </ImageBackground>

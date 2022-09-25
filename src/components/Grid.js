@@ -22,9 +22,10 @@ const Grid = ({theme, vals, userName, mode}) => {
   const [isRed, setIsRed] = useState(originRed);
   const [time, setTime] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [bestPerson, setBestPerson] = useState("Null");
   const [bestTime, setBestTime] = useState("NA");
   const [isFinished, setIsFinished] = useState(false);
+  const [selectedX, setSelectedX] = useState(-1);
+  const [selectedY, setSelectedY] = useState(-1);
 
 
 
@@ -123,7 +124,7 @@ const Grid = ({theme, vals, userName, mode}) => {
         icon={props.type}
         iconColor= {props.isDelete ? theme.colors.error : theme.colors.primary}
         size={40}
-        onPress={() => console.log('Pressed')}
+        onPress={props.onPress}
       />
     )
   }
@@ -134,20 +135,19 @@ const Grid = ({theme, vals, userName, mode}) => {
     const vals = value.vals;
     const isRed = value.isRed;
     const update = value.update;
-  
+  //  isRed[x][y] ? styles.CellRed : styles.CellBlue
+
   
     let x = 3*id0+id2, y = 3*id1+id3;
     return (
       <TouchableHighlight onPress = {() => {
-        let copy = [...isRed];
-        copy[x][y]++;
-        setIsRed(copy);
+        setSelectedX(x);
+        setSelectedY(y);
       }}>
-  
-      <View style={isRed[x][y] ? styles.CellRed : styles.CellBlue}>
-        {vals[x][y] == "" ? 
+      <View style={(selectedX==x && selectedY==y)?styles.CellBlueSelected:styles.CellBlue}>
+        {userVals[x][y] == "" ? 
         <Text/>
-        : <Text style={{fontSize:22}}>{vals[3*id0+id2][3*id1+id3]}</Text>
+        : <Text style={{fontSize:22}}>{userVals[3*id0+id2][3*id1+id3]}</Text>
         /*<TextInput
           ref={inputRef}
           style={{height: 28, width: 28, fontSize: 22, color: 'blue', textAlign: 'center'}}
@@ -211,17 +211,55 @@ const Grid = ({theme, vals, userName, mode}) => {
         <GridRow id={2}/>
       </View>
       <View style={{flexDirection:'row', justifyContent: 'center'}}>
-        <RoundButton type='numeric-1-circle-outline'/>
-        <RoundButton type='numeric-2-circle-outline'/>
-        <RoundButton type='numeric-3-circle-outline'/>
-        <RoundButton type='numeric-4-circle-outline'/>
-        <RoundButton type='numeric-5-circle-outline'/>
+        <RoundButton type='numeric-1-circle-outline' 
+          onPress = {()=>{
+            //alert(selectedX);
+            //alert(selectedY);
+            update(selectedX, selectedY, 1);
+            //alert(userVals[0][2]);
+          }}
+        />
+        <RoundButton type='numeric-2-circle-outline'
+          onPress = {()=>{
+            update(selectedX, selectedY, 2);
+          }}
+        />
+        <RoundButton type='numeric-3-circle-outline'
+          onPress = {()=>{
+            update(selectedX, selectedY, 3);
+          }}/>
+        <RoundButton type='numeric-4-circle-outline'
+          onPress = {()=>{
+            update(selectedX, selectedY, 4);
+          }}
+        />
+        <RoundButton type='numeric-5-circle-outline'
+          onPress = {()=>{
+            update(selectedX, selectedY, 5);
+          }}
+        />
       </View>
       <View style={{flexDirection:'row', justifyContent: 'center'}}>
-        <RoundButton type='numeric-6-circle-outline'/>
-        <RoundButton type='numeric-7-circle-outline'/>
-        <RoundButton type='numeric-8-circle-outline'/>
-        <RoundButton type='numeric-9-circle-outline'/>
+      <RoundButton type='numeric-6-circle-outline' 
+          onPress = {()=>{
+            update(selectedX, selectedY, 6);
+          }}
+        />
+        <RoundButton type='numeric-7-circle-outline'
+          onPress = {()=>{
+            update(selectedX, selectedY, 7);
+          }}
+        />
+        <RoundButton type='numeric-8-circle-outline'
+          onPress = {()=>{
+            update(selectedX, selectedY, 8);
+          }}
+        />
+        <RoundButton type='numeric-9-circle-outline'
+          onPress = {()=>{
+            update(selectedX, selectedY, 9);
+          }}
+        />
         <RoundButton type='arrow-collapse-left' isDelete={true}/>
       </View>
       </View>
@@ -296,11 +334,31 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
   },
+  CellBlueSelected:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EAF2F8',
+    margin: 2,
+    borderWidth: 2,
+    borderColor: 'red',
+    height: 30,
+    width: 30,
+  },
   CellRed:{
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5B7B1',
     margin: 2,
+    height: 30,
+    width: 30,
+  },
+  CellRedSelected:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5B7B1',
+    margin: 2,
+    borderWidth: 2,
+    borderColor: 'red',
     height: 30,
     width: 30,
   },
