@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native'
 import { Text, withTheme} from 'react-native-paper'
 import Axios from 'axios'
 import Background from '../components/Background'
@@ -59,7 +59,10 @@ const RegisterScreen = ({ theme, navigation }) => {
           let data = {email: email, name: name, password: password};
           Axios.post(url+"/users", data).then (resp => {
             alert("Successfully Registered!");
-            navigation.navigate('MainApp');
+            let respData = resp.data;
+            AsyncStorage.setItem("userInfo", respData).then(() => {
+              navigation.navigate('MainApp');
+            })
           })
         }
       })

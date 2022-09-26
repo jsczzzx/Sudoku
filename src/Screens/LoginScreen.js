@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, AsyncStorage } from 'react-native'
 import { Text, withTheme } from 'react-native-paper'
 import Axios from 'axios';
 import Background from '../components/Background'
@@ -47,7 +47,9 @@ const LoginScreen = ({ theme, navigation }) => {
         else if (respData.password != password)
           alert("Wrong Password!");
         else
+        AsyncStorage.setItem("userId", respData.id.toString()).then(() => {
           navigation.navigate('MainApp');
+        })      
       })
     }
   }

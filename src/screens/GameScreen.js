@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, createRef, setState } from "react"
-import { View, Text, StyleSheet, ImageBackground, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Image, TextInput, AsyncStorage } from 'react-native';
 
 import Grid from '../components/Grid';
 import Timer from '../components/Timer';
@@ -60,6 +60,12 @@ const GameScreen = () => {
     setTime(time);
   }
 
+  /*const [id, setId] = useState("");
+  useEffect(()=> {
+    AsyncStorage.getItem("userId").then((resp)=>{
+      setId(resp)
+    })
+  }, [])*/
 
   return (
     <Background>
