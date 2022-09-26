@@ -14,8 +14,8 @@ import { passwordValidator } from '../helpers/passwordValidator'
 const url = "http://localhost:3000";
 
 const LoginScreen = ({ theme, navigation }) => {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const styles = StyleSheet.create({
     forgotPassword: {
       width: '100%',
@@ -36,32 +36,20 @@ const LoginScreen = ({ theme, navigation }) => {
     },
   })
   const onLoginPressed = () => {
-
-    /*const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      return
+    if (email === "" || password === "")
+      alert("Please fill all required fields!");
+    else {
+      let data = {email: email};
+      Axios.post(url+"/user/get_by_email", data).then (resp => {
+        let respData = resp.data;
+        if (respData == null)
+          alert("Account doesn't exist!");
+        else if (respData.password != password)
+          alert("Wrong Password!");
+        else
+          navigation.navigate('MainApp');
+      })
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })*/
-    //navigation.navigate('MainApp');
-    let data = {email: email};
-    Axios.post(url+"/user/get_by_email", data).then (resp => {
-      //alert(JSON.stringify(resp.data))
-      let respData = resp.data;
-      if (respData == null)
-        alert("Account doesn't exist!");
-      else if (respData.password != password)
-        alert("Wrong Password!");
-      else
-        navigation.navigate('MainApp');
-    })
-    //alert(JSON.stringify(Axios.get(url+"/users/1")));
-    //alert(email);
   }
 
   return (

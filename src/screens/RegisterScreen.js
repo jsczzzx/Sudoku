@@ -11,11 +11,21 @@ import BackButton from '../components/BackButton'
 
 const url = "http://localhost:3000"
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 
 const RegisterScreen = ({ theme, navigation }) => {
-  const [name, setName] = useState()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password_2, setPassword_2] = useState("");
+
 
   const styles = StyleSheet.create({
     row: {
@@ -26,27 +36,35 @@ const RegisterScreen = ({ theme, navigation }) => {
       fontWeight: 'bold',
       color: theme.colors.primary,
     },
-  })
+  });
 
   const onSignUpPressed = () => {
-    let data0 = {email: email};
-
-    //zixinzhang@brandeis.edu
-
-    Axios.post(url+"/user/get_by_email", data0).then (resp => {
-      let respData = resp.data;
-      if (respData != null) {
-        alert("Email is already used!");
-        setEmail("");
-      } else {
-        let data = {email: email, name: name, password: password};
-        Axios.post(url+"/users", data).then (resp => {
-          alert("Successfully Registered!");
-          navigation.navigate('MainApp');
-        })
-      }
-    })
-  }
+    if (name === "" || email === "" || password === "" || password_2 === "")
+      alert("Please fill all required fields!");
+    else if (password != password_2) {
+      alert("Passwords don't match!");
+      setPassword("");
+      setPassword_2("");
+    } else if (!validateEmail(email)) {
+      alert("The email address is invalid!");
+      setEmail("");
+    } else {
+      let data0 = {email: email};  
+      Axios.post(url+"/user/get_by_email", data0).then (resp => {
+        let respData = resp.data;
+        if (respData != null) {
+          alert("Email is already used!");
+          setEmail("");
+        } else {
+          let data = {email: email, name: name, password: password};
+          Axios.post(url+"/users", data).then (resp => {
+            alert("Successfully Registered!");
+            navigation.navigate('MainApp');
+          })
+        }
+      })
+    }
+  };
 
   return (
     <Background>
@@ -76,6 +94,13 @@ const RegisterScreen = ({ theme, navigation }) => {
         onChangeText={(text) => setPassword(text)}
         secureTextEntry
       />
+      <TextInput
+        label="Re-enter Password"
+        returnKeyType="done"
+        value={password_2}
+        onChangeText={(text) => setPassword_2(text)}
+        secureTextEntry
+      />
       <Button
         mode="contained"
         onPress={onSignUpPressed}
@@ -91,6 +116,6 @@ const RegisterScreen = ({ theme, navigation }) => {
       </View>
     </Background>
   )
-}
+};
 
 export default withTheme(RegisterScreen);
