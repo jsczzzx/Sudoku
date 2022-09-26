@@ -1,20 +1,21 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, withTheme} from 'react-native-paper'
+import Axios from 'axios'
 import Background from '../components/Background'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
 import BackButton from '../components/BackButton'
-import { emailValidator } from '../helpers/emailValidator'
-import { passwordValidator } from '../helpers/passwordValidator'
-import { nameValidator } from '../helpers/nameValidator'
+
+const url = "http://localhost:3000"
+
 
 const RegisterScreen = ({ theme, navigation }) => {
-  const [name, setName] = useState({ value: '', error: '' })
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [name, setName] = useState()
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
 
   const styles = StyleSheet.create({
     row: {
@@ -28,18 +29,22 @@ const RegisterScreen = ({ theme, navigation }) => {
   })
 
   const onSignUpPressed = () => {
-    const nameError = nameValidator(name.value)
-    const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError || nameError) {
-      setName({ ...name, error: nameError })
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      return
-    }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+    let data0 = {email: email};
+
+    //zixinzhang@brandeis.edu
+
+    Axios.post(url+"/user/get_by_email", data0).then (resp => {
+      let respData = resp.data;
+      if (respData != null) {
+        alert("Email is already used!");
+        setEmail("");
+      } else {
+        let data = {email: email, name: name, password: password};
+        Axios.post(url+"/users", data).then (resp => {
+          alert("Successfully Registered!");
+          navigation.navigate('MainApp');
+        })
+      }
     })
   }
 
@@ -51,18 +56,14 @@ const RegisterScreen = ({ theme, navigation }) => {
       <TextInput
         label="Name"
         returnKeyType="next"
-        value={name.value}
-        onChangeText={(text) => setName({ value: text, error: '' })}
-        error={!!name.error}
-        errorText={name.error}
+        value={name}
+        onChangeText={(text) => setName(text)}
       />
       <TextInput
         label="Email"
         returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
+        value={email}
+        onChangeText={(text) => setEmail(text)}
         autoCapitalize="none"
         autoCompleteType="email"
         textContentType="emailAddress"
@@ -71,10 +72,8 @@ const RegisterScreen = ({ theme, navigation }) => {
       <TextInput
         label="Password"
         returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
+        value={password}
+        onChangeText={(text) => setPassword(text)}
         secureTextEntry
       />
       <Button

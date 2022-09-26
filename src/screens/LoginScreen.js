@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text, withTheme } from 'react-native-paper'
+import Axios from 'axios';
 import Background from '../components/Background'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
@@ -9,6 +10,8 @@ import TextInput from '../components/TextInput'
 import BackButton from '../components/BackButton'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+
+const url = "http://localhost:3000";
 
 const LoginScreen = ({ theme, navigation }) => {
   const [email, setEmail] = useState({ value: '', error: '' })
@@ -33,6 +36,7 @@ const LoginScreen = ({ theme, navigation }) => {
     },
   })
   const onLoginPressed = () => {
+
     /*const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
     if (emailError || passwordError) {
@@ -44,7 +48,20 @@ const LoginScreen = ({ theme, navigation }) => {
       index: 0,
       routes: [{ name: 'Dashboard' }],
     })*/
-    navigation.navigate('MainApp');
+    //navigation.navigate('MainApp');
+    let data = {email: email};
+    Axios.post(url+"/user/get_by_email", data).then (resp => {
+      //alert(JSON.stringify(resp.data))
+      let respData = resp.data;
+      if (respData == null)
+        alert("Account doesn't exist!");
+      else if (respData.password != password)
+        alert("Wrong Password!");
+      else
+        navigation.navigate('MainApp');
+    })
+    //alert(JSON.stringify(Axios.get(url+"/users/1")));
+    //alert(email);
   }
 
   return (
@@ -55,10 +72,8 @@ const LoginScreen = ({ theme, navigation }) => {
       <TextInput
         label="Email"
         returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
+        value={email}
+        onChangeText={(text) => setEmail(text)}
         autoCapitalize="none"
         autoCompleteType="email"
         textContentType="emailAddress"
@@ -67,10 +82,8 @@ const LoginScreen = ({ theme, navigation }) => {
       <TextInput
         label="Password"
         returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
+        value={password}
+        onChangeText={(text) => setPassword(text)}
         secureTextEntry
       />
       <Button mode="contained" onPress={onLoginPressed}>
