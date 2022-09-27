@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native'
+import { View, StyleSheet, TouchableOpacity} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text, withTheme} from 'react-native-paper'
 import Axios from 'axios'
 import Background from '../components/Background'
@@ -8,8 +9,7 @@ import Header from '../components/Header'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
 import BackButton from '../components/BackButton'
-
-const url = "http://localhost:3000"
+import url from '../api/ServerApi'
 
 const validateEmail = (email) => {
   return String(email)

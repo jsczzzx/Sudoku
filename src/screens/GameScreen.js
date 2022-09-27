@@ -67,9 +67,10 @@ const GameScreen = () => {
     })
   }, [])*/
 
+  //      <Timer updateTime={updateTime}/>
+
   return (
     <Background>
-      <Timer updateTime={updateTime}/>
       <Grid vals={easyData.sudokuList[0]} userName={userName} mode="easy"/>
     </Background>
   );
