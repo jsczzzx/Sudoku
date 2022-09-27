@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef, createRef, setState, useContext, createContext,AsyncStorage } from "react"
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableHighlight } from 'react-native';
-import ValueProvider, {useValue} from './ValueContext';
 import Button from './Button';
 import {IconButton} from 'react-native-paper';
 import {withTheme} from 'react-native-paper'
-
-
 
 
 const Grid = ({theme, vals, userName, mode}) => {
@@ -20,16 +17,14 @@ const Grid = ({theme, vals, userName, mode}) => {
 
   let originRed = new Array(9).fill(0).map(() => new Array(9).fill(0));
   const [isRed, setIsRed] = useState(originRed);
-  const [time, setTime] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [bestTime, setBestTime] = useState("NA");
-  const [isFinished, setIsFinished] = useState(false);
   const [selectedX, setSelectedX] = useState(-1);
   const [selectedY, setSelectedY] = useState(-1);
 
 
 
   const update = (x, y, val) => {
+    if (userVals[x][y] === "" && val === "")
+      return;
     let originalVal = userVals[x][y];
     let copy = [...userVals];
     copy[x][y] = val;
@@ -130,38 +125,40 @@ const Grid = ({theme, vals, userName, mode}) => {
   }
 
   const Cell = ({id0, id1, id2, id3}) => {
-    const inputRef = React.createRef()
-    const value = useValue();
-    const vals = value.vals;
-    const isRed = value.isRed;
-    const update = value.update;
-  //  isRed[x][y] ? styles.CellRed : styles.CellBlue
-
   
     let x = 3*id0+id2, y = 3*id1+id3;
+    let isSelected = selectedX==x && selectedY==y;
+    let style = {};
+
+    if (isRed[x][y] > 0 && isSelected)
+      style = styles.CellRedSelected;
+    if (isRed[x][y] == 0 && isSelected)
+      style = styles.CellBlueSelected;
+    if (isRed[x][y] > 0 && !isSelected)
+      style = styles.CellRed;
+    if (isRed[x][y] == 0 && !isSelected)
+      style = styles.CellBlue;
+
     return (
+      vals[x][y] != ""
+      ? 
+      <View style={style}>
+        <Text style={{fontSize:22}}>{vals[x][y]}</Text>
+      </View>
+      : 
       <TouchableHighlight onPress = {() => {
         setSelectedX(x);
         setSelectedY(y);
       }}>
-      <View style={(selectedX==x && selectedY==y)?styles.CellBlueSelected:styles.CellBlue}>
-        {userVals[x][y] == "" ? 
-        <Text/>
-        : <Text style={{fontSize:22}}>{userVals[3*id0+id2][3*id1+id3]}</Text>
-        /*<TextInput
-          ref={inputRef}
-          style={{height: 28, width: 28, fontSize: 22, color: 'blue', textAlign: 'center'}}
-          maxLength = {1}
-          onChangeText = {(text) => {
-            if ((text > 0 && text <= 9) || text == "") {
-              update(x, y, text);
-            } else {
-              inputRef.current.clear()
-            }
-          }}
-        > 
-        </TextInput>
-        : <Text style={{fontSize:22}}>{vals[3*id0+id2][3*id1+id3]}</Text>*/
+      <View style={style}>
+        {userVals[x][y] == "" 
+        ? 
+          <Text/>
+        : 
+        <Text style={{fontSize:22, color: 'blue'}}>
+          {userVals[x][y]}
+        </Text>
+
       }
         
       </View>  
@@ -204,7 +201,7 @@ const Grid = ({theme, vals, userName, mode}) => {
   
   const LargeGrid = () => {
     return (
-      <View>
+      <View style={{alignItems: 'center'}}>
       <View style={styles.largeGrid}>
         <GridRow id={0}/>
         <GridRow id={1}/>
@@ -213,28 +210,30 @@ const Grid = ({theme, vals, userName, mode}) => {
       <View style={{flexDirection:'row', justifyContent: 'center'}}>
         <RoundButton type='numeric-1-circle-outline' 
           onPress = {()=>{
-            //alert(selectedX);
-            //alert(selectedY);
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 1);
-            //alert(userVals[0][2]);
           }}
         />
         <RoundButton type='numeric-2-circle-outline'
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 2);
           }}
         />
         <RoundButton type='numeric-3-circle-outline'
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 3);
           }}/>
         <RoundButton type='numeric-4-circle-outline'
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 4);
           }}
         />
         <RoundButton type='numeric-5-circle-outline'
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 5);
           }}
         />
@@ -242,39 +241,42 @@ const Grid = ({theme, vals, userName, mode}) => {
       <View style={{flexDirection:'row', justifyContent: 'center'}}>
       <RoundButton type='numeric-6-circle-outline' 
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 6);
           }}
         />
         <RoundButton type='numeric-7-circle-outline'
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 7);
           }}
         />
         <RoundButton type='numeric-8-circle-outline'
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 8);
           }}
         />
         <RoundButton type='numeric-9-circle-outline'
           onPress = {()=>{
+            update(selectedX, selectedY, "");
             update(selectedX, selectedY, 9);
           }}
         />
-        <RoundButton type='arrow-collapse-left' isDelete={true}/>
+        <RoundButton type='arrow-collapse-left' isDelete={true}
+          onPress = {()=>{
+            update(selectedX, selectedY, "");
+          }}
+        />
       </View>
+      <Button mode="contained" onPress={()=>{}}>
+        Submit
+      </Button>
       </View>
     )
   }
-
-
-
   return (
-
-      <ValueProvider
-        value={{vals, isRed, update}} >  
-        <LargeGrid/>
-      </ValueProvider>
-
+    <LargeGrid/>
   );
 }
 
