@@ -6,7 +6,7 @@ import RoundButton from './RoundButton';
 import {Stopwatch} from 'react-native-stopwatch-timer';
 
 
-const Grid = ({theme, vals, userName, mode}) => {
+const GameComponent = ({theme, vals, userName, mode}) => {
 
   const [currentTime, setCurrentTime] = useState();
   const [isStopwatchStart, setIsStopwatchStart] = useState(true);
@@ -133,7 +133,13 @@ const Grid = ({theme, vals, userName, mode}) => {
     if (isRed[x][y] == 0 && !isSelected)
       style = styles.CellBlue;
 
-    return (
+    if (!isStopwatchStart)
+      return (
+        <View style={style}>
+          <Text style={{fontSize:22}}>{""}</Text>
+        </View>      
+      )
+    else return (
       vals[x][y] != ""
       ? 
       <View style={style}>
@@ -196,7 +202,7 @@ const Grid = ({theme, vals, userName, mode}) => {
 
   return (
     <View>
-      <View style={styles.sectionStyle}>
+      <View style={styles.timerPart}>
         <Stopwatch
           laps
           msecs
@@ -210,7 +216,7 @@ const Grid = ({theme, vals, userName, mode}) => {
             //setTime(time);
           }}
         />
-        <RoundButton type='play-circle-outline'
+        <RoundButton type={isStopwatchStart ?'pause-circle-outline':'play-circle-outline'}
           onPress = {()=>{
             setIsStopwatchStart(!isStopwatchStart);
             //setResetStopwatch(false);
@@ -295,7 +301,7 @@ const Grid = ({theme, vals, userName, mode}) => {
   );
 }
 
-export default withTheme(Grid);
+export default withTheme(GameComponent);
 
 const styles = StyleSheet.create({
   container: {
@@ -303,32 +309,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   timerPart: {
-    flex: 1.5,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 10
-  },
-  mainPart: {
-    flex: 5,
-    alignItems: 'center',
-    justifyContent: 'space-around'
-  },
-  subPart: {
-    flex: 2,
+    flex: 0.5,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around'
-  },
-  subPart1: {
-    flex: 1,
+    marginTop: 32,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  subPart2: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
+
   largeGrid:{
     borderWidth: 3
   },
@@ -379,13 +366,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
   },
-  sectionStyle: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
 });
 
 const options = {

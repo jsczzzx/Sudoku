@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, createRef, setState } from "react"
 import { View, Text, StyleSheet, ImageBackground, Image, TextInput, AsyncStorage } from 'react-native';
 
-import Grid from '../components/Grid';
+import GameComponent from '../components/GameComponent';
 import * as easyData from './easyData.json';
 import Axios from 'axios'
 
@@ -24,28 +24,6 @@ const GameScreen = ({theme}) => {
 
   const[isLoading, setIsLoading] = useState(true);
 
-  /*useEffect(() => {
-    Axios.get(url+'/geteasy')
-    .then((response) => {
-      let sudokuStr = response.data;
-      var count = 0;
-      for (var i = 0; i < 9; i++) {
-        let line = [];
-        for (var j = 0; j < 9; j++) {
-          let cur = sudokuStr.charAt(count);
-          count++;
-          if (cur == ".") {
-            line.push("");
-          } else {
-            line.push(cur);
-          }
-        }
-        data.push(line);
-      }
-      setSudokuData(data);
-      setIsLoading(false);
-    });
-  },[])*/
 
 
 
@@ -54,18 +32,10 @@ const GameScreen = ({theme}) => {
   const [userName, setUserName] = useState("");
 
 
-  /*const [id, setId] = useState("");
-  useEffect(()=> {
-    AsyncStorage.getItem("userId").then((resp)=>{
-      setId(resp)
-    })
-  }, [])*/
-
-  //      <Timer updateTime={updateTime}/>
 
   return (
     <Background>
-      <Grid vals={easyData.sudokuList[0]} userName={userName} mode="easy"/>
+      <GameComponent vals={easyData.sudokuList[0]} userName={userName} mode="easy"/>
     </Background>
   );
   
