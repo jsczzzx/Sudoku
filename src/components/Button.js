@@ -5,7 +5,7 @@ import { Button as PaperButton, withTheme } from 'react-native-paper'
 const Button = ({ theme, mode, style, ...props }) => {
   const styles = StyleSheet.create({
     button: {
-      width: '100%',
+      width: 140,
       marginVertical: 10,
       paddingVertical: 2,
     },

@@ -1,11 +1,47 @@
 import React, { useState, useEffect, useRef, createRef, setState, useContext, createContext,AsyncStorage } from "react"
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableHighlight } from 'react-native';
 import Button from './Button';
-import {IconButton} from 'react-native-paper';
 import {withTheme} from 'react-native-paper'
+import RoundButton from './RoundButton';
+import {Stopwatch} from 'react-native-stopwatch-timer';
 
 
 const Grid = ({theme, vals, userName, mode}) => {
+
+  const [currentTime, setCurrentTime] = useState();
+
+
+  const StopWatch= () => {
+    const [isStopwatchStart, setIsStopwatchStart] = useState(true);
+    const [resetStopwatch, setResetStopwatch] = useState(false);
+    const [time, setTime] = useState();
+    return (
+  
+      <View style={styles.sectionStyle}>
+        <Stopwatch
+          laps
+          msecs
+          start={isStopwatchStart}
+          //To start
+          reset={resetStopwatch}
+          //To reset
+          options={options}
+          //options for the styling
+          getTime={(time) => {
+            setTime(time);
+          }}
+        />
+        <RoundButton type='play-circle-outline'
+          onPress = {()=>{
+            setIsStopwatchStart(!isStopwatchStart);
+            //setResetStopwatch(false);
+            //setCurrentTime(time);
+          }}
+        />
+      </View>
+          
+    );
+  };
 
   let copy = new Array(9).fill("").map(() => new Array(9).fill(""));
   for (var i = 0; i < 9; i++) {
@@ -110,19 +146,6 @@ const Grid = ({theme, vals, userName, mode}) => {
     }
   }
 
-  const RoundButton = (props) => {
-    return (
-      <IconButton
-        style={{
-          width: '100%',
-        }}
-        icon={props.type}
-        iconColor= {props.isDelete ? theme.colors.error : theme.colors.primary}
-        size={40}
-        onPress={props.onPress}
-      />
-    )
-  }
 
   const Cell = ({id0, id1, id2, id3}) => {
   
@@ -202,6 +225,7 @@ const Grid = ({theme, vals, userName, mode}) => {
   const LargeGrid = () => {
     return (
       <View style={{alignItems: 'center'}}>
+        <StopWatch/>
       <View style={styles.largeGrid}>
         <GridRow id={0}/>
         <GridRow id={1}/>
@@ -269,7 +293,7 @@ const Grid = ({theme, vals, userName, mode}) => {
           }}
         />
       </View>
-      <Button mode="contained" onPress={()=>{}}>
+      <Button mode="contained" onPress={()=>{alert(currentTime)}}>
         Submit
       </Button>
       </View>
@@ -364,22 +388,26 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
   },
-  CellButton:{
-    justifyContent: 'center',
+  sectionStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 32,
     alignItems: 'center',
-    backgroundColor: '#ff9933',
-    margin: 2,
-    borderWidth: 1,
-    height: 30,
-    width: 30,
+    justifyContent: 'center',
   },
-  Circle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 30,
-    height: 30,
-    margin: 2,
-    borderRadius: 15,
-    backgroundColor: '#ff9933',
-  }
 });
+
+const options = {
+  container: {
+    backgroundColor: 'darkseagreen',
+    padding: 5,
+    borderRadius: 5,
+    width: 200,
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 25,
+    color: '#FFF',
+    marginLeft: 7,
+  },
+};

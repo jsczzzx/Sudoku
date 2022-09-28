@@ -18,7 +18,7 @@ const url = "https://secure-earth-67171.herokuapp.com";
 
 
 
-const GameScreen = () => {
+const GameScreen = ({theme}) => {
   var rand = 0 + Math.floor(Math.random() * (9 - 0 + 1));
   var data = [];
   const[sudokuData, setSudokuData] = useState("");

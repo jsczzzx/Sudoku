@@ -9,6 +9,8 @@ import MainApp from './src/MainApp';
 import StartScreen from './src/screens/StartScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
+import GameScreen from './src/screens/GameScreen';
+
 
 
 const Stack = createStackNavigator();
@@ -40,6 +42,13 @@ const MyStack = () => {
       <Stack.Screen
         name="MainApp"
         component={MainApp}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="Game"
+        component={GameScreen}
         options={{
           headerShown: false
         }}
