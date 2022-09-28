@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, createRef, setState } from "react"
 import { View, Text, StyleSheet, ImageBackground, Image, TextInput, AsyncStorage } from 'react-native';
 
 import Grid from '../components/Grid';
-import Timer from '../components/Timer';
 import * as easyData from './easyData.json';
 import Axios from 'axios'
 
@@ -53,12 +52,7 @@ const GameScreen = ({theme}) => {
   let vals = easyData.sudokuList[0];
   const [isInput, setIsInput] = useState(false);
   const [userName, setUserName] = useState("");
-  const [time, setTime] = useState(0);
 
-
-  const updateTime = (time) => {
-    setTime(time);
-  }
 
   /*const [id, setId] = useState("");
   useEffect(()=> {

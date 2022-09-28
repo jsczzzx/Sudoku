@@ -10,14 +10,13 @@ import {
 } from 'react-native';
 
 //importing library to use Stopwatch and Timer
-import StopWatch from '../components/StopWatch'
 
 
 const AccountScreen = () => {
 
 
   return (
-    <StopWatch/>
+    <View></View>
   );
 };
 

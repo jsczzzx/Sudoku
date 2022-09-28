@@ -9,39 +9,10 @@ import {Stopwatch} from 'react-native-stopwatch-timer';
 const Grid = ({theme, vals, userName, mode}) => {
 
   const [currentTime, setCurrentTime] = useState();
+  const [isStopwatchStart, setIsStopwatchStart] = useState(true);
+  const [resetStopwatch, setResetStopwatch] = useState(false);
+  const [time, setTime] = useState();
 
-
-  const StopWatch= () => {
-    const [isStopwatchStart, setIsStopwatchStart] = useState(true);
-    const [resetStopwatch, setResetStopwatch] = useState(false);
-    const [time, setTime] = useState();
-    return (
-  
-      <View style={styles.sectionStyle}>
-        <Stopwatch
-          laps
-          msecs
-          start={isStopwatchStart}
-          //To start
-          reset={resetStopwatch}
-          //To reset
-          options={options}
-          //options for the styling
-          getTime={(time) => {
-            setTime(time);
-          }}
-        />
-        <RoundButton type='play-circle-outline'
-          onPress = {()=>{
-            setIsStopwatchStart(!isStopwatchStart);
-            //setResetStopwatch(false);
-            //setCurrentTime(time);
-          }}
-        />
-      </View>
-          
-    );
-  };
 
   let copy = new Array(9).fill("").map(() => new Array(9).fill(""));
   for (var i = 0; i < 9; i++) {
@@ -222,10 +193,33 @@ const Grid = ({theme, vals, userName, mode}) => {
     )
   }
   
-  const LargeGrid = () => {
-    return (
-      <View style={{alignItems: 'center'}}>
-        <StopWatch/>
+
+  return (
+    <View>
+      <View style={styles.sectionStyle}>
+        <Stopwatch
+          laps
+          msecs
+          start={isStopwatchStart}
+          //To start
+          reset={resetStopwatch}
+          //To reset
+          options={options}
+          //options for the styling
+          getTime={(time) => {
+            //setTime(time);
+          }}
+        />
+        <RoundButton type='play-circle-outline'
+          onPress = {()=>{
+            setIsStopwatchStart(!isStopwatchStart);
+            //setResetStopwatch(false);
+            //setCurrentTime(time);
+          }}
+        />
+      </View>
+
+    <View style={{alignItems: 'center'}}>
       <View style={styles.largeGrid}>
         <GridRow id={0}/>
         <GridRow id={1}/>
@@ -297,10 +291,7 @@ const Grid = ({theme, vals, userName, mode}) => {
         Submit
       </Button>
       </View>
-    )
-  }
-  return (
-    <LargeGrid/>
+    </View>
   );
 }
 
