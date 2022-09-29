@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useRef, createRef, setState, useContext, createContext,AsyncStorage } from "react"
+import React, { useState, useEffect, useRef, createRef, setState, useContext, createContext} from "react"
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableHighlight } from 'react-native';
 import Button from './Button';
 import {withTheme} from 'react-native-paper'
+import BackButton from './BackButton';
 import RoundButton from './RoundButton';
 import {Stopwatch} from 'react-native-stopwatch-timer';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import Axios from 'axios';
+import url from '../api/ServerApi';
 
-
-const GameComponent = ({theme, vals, userName, mode}) => {
+const GameComponent = ({theme, vals, mode, navigation}) => {
 
   const [currentTime, setCurrentTime] = useState();
   const [isStopwatchStart, setIsStopwatchStart] = useState(true);
   const [resetStopwatch, setResetStopwatch] = useState(false);
   const [time, setTime] = useState();
+
 
 
   let copy = new Array(9).fill("").map(() => new Array(9).fill(""));
@@ -202,10 +206,13 @@ const GameComponent = ({theme, vals, userName, mode}) => {
 
   return (
     <View>
+
       <View style={styles.timerPart}>
+        <RoundButton type={'keyboard-backspace'}
+          onPress={()=>{navigation.navigate('MainApp')}}
+        />
         <Stopwatch
           laps
-          msecs
           start={isStopwatchStart}
           //To start
           reset={resetStopwatch}
@@ -213,7 +220,7 @@ const GameComponent = ({theme, vals, userName, mode}) => {
           options={options}
           //options for the styling
           getTime={(time) => {
-            //setTime(time);
+            setTime(time);
           }}
         />
         <RoundButton type={isStopwatchStart ?'pause-circle-outline':'play-circle-outline'}
@@ -293,7 +300,32 @@ const GameComponent = ({theme, vals, userName, mode}) => {
           }}
         />
       </View>
-      <Button mode="contained" onPress={()=>{alert(currentTime)}}>
+      <Button mode="contained" onPress={() => {
+        let isValid = true;
+        for (var i = 0; i < 9; i++) {
+          for (var j = 0; j < 9; j++) {
+            if (isRed[i][j] != 0 || userVals[i][j] == "") {
+              isValid = false;
+              break;
+            }
+          }
+        }
+        //isValid=false;
+        if (isValid) {
+          setIsStopwatchStart(false);
+          let timeArray = time.split(':').map(Number);
+          let timeInSeconds = 3600*timeArray[0]+60*timeArray[1]+timeArray[2];
+          AsyncStorage.getItem("userId").then((resp) => {
+            let data = {user_id: resp, time: timeInSeconds, mode: mode};
+            Axios.post(url+"/scores", data).then((resp) => {
+              alert("Nice! You finished in " + timeInSeconds + "s.");
+              navigation.navigate('MainApp');
+            })
+          })   
+        } else {
+          alert("You haven't finished yet!");
+        }
+      }}>
         Submit
       </Button>
       </View>
@@ -313,7 +345,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 32,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
 
   largeGrid:{

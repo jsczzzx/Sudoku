@@ -1,47 +1,37 @@
 import React, { useState, useEffect, useRef, createRef, setState } from "react"
 import { View, Text, StyleSheet, ImageBackground, Image, TextInput, AsyncStorage } from 'react-native';
-
 import GameComponent from '../components/GameComponent';
-import * as easyData from './easyData.json';
-import Axios from 'axios'
-
 import {withTheme} from  'react-native-paper'
 import Background from '../components/Background'
-import Logo from '../components/Logo'
-import Header from '../components/Header'
-import Button from '../components/Button'
-import Paragraph from '../components/Paragraph'
+import {generate} from '../components/sudoku'
 
+const GameScreen = ({theme, navigation, route}) => {
+  const mode = route.params.mode;
 
-const url = "https://secure-earth-67171.herokuapp.com";
-
-
-
-const GameScreen = ({theme}) => {
-  var rand = 0 + Math.floor(Math.random() * (9 - 0 + 1));
-  var data = [];
-  const[sudokuData, setSudokuData] = useState("");
-
-  const[isLoading, setIsLoading] = useState(true);
-
-
-
-
-  let vals = easyData.sudokuList[0];
-  const [isInput, setIsInput] = useState(false);
-  const [userName, setUserName] = useState("");
-
-
+  let data = [];
+  let sudokuStr = mode==='easy'? generate("medium"):generate("insane");
+  var count = 0;
+  for (var i = 0; i < 9; i++) {
+    let line = [];
+    for (var j = 0; j < 9; j++) {
+      let cur = sudokuStr.charAt(count);
+      count++;
+      if (cur == ".") {
+        line.push("");
+      } else {
+        line.push(cur);
+      }
+    }
+    data.push(line);
+  }
 
   return (
     <Background>
-      <GameComponent vals={easyData.sudokuList[0]} userName={userName} mode="easy"/>
+      <GameComponent vals={data} navigation={navigation}/>
     </Background>
   );
-  
 
 }
-
 
 export default withTheme(GameScreen);
 

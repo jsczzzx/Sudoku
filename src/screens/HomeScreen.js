@@ -34,14 +34,14 @@ const HomeScreen = ({ theme, navigation }) => {
         <Button 
           style={{backgroundColor: 'darkseagreen'}}
           mode="contained" 
-          onPress={()=>navigation.navigate('Game')}
+          onPress={()=>navigation.navigate('Game', { mode: 'easy' })}
         >
           Easy Mode
         </Button>
         <Button 
           style={{backgroundColor: 'orangered'}}
           mode="contained" 
-          onPress={()=> navigation.navigate('Game')}
+          onPress={()=> navigation.navigate('Game', { mode: 'hard' })}
         >
           Hard Mode
         </Button>
