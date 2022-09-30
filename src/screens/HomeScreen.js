@@ -12,23 +12,12 @@ import BackButton from '../components/BackButton'
 import url from '../api/ServerApi'
 
 const HomeScreen = ({ theme, navigation }) => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const styles = StyleSheet.create({
-    header: {
-      fontSize: 25,
-      fontWeight: 'bold',
-      color: theme.colors.primary,
-      paddingVertical: 12,
-    },
-  })
-
 
   return (
     <Background>
       <View style={{flex:1, alignItems:'center', justifyContent:'flex-end'}}>
         <Logo/>
-        <Text style={styles.header}>Super Sudoku!</Text>
+        <Header style={{fontSize: 25}}>Super Sudoku!</Header>
       </View>
       <View style={{flex:1, justifyContent:'space-around'}}>
         <Button 
