@@ -208,7 +208,7 @@ const GameComponent = ({theme, vals, mode, navigation}) => {
     <View>
 
       <View style={styles.timerPart}>
-        <RoundButton type={'keyboard-backspace'}
+        <RoundButton type={'keyboard-backspace'} size={40}
           onPress={()=>{navigation.navigate('MainApp')}}
         />
         <Stopwatch
@@ -223,7 +223,7 @@ const GameComponent = ({theme, vals, mode, navigation}) => {
             setTime(time);
           }}
         />
-        <RoundButton type={isStopwatchStart ?'pause-circle-outline':'play-circle-outline'}
+        <RoundButton type={isStopwatchStart ?'pause-circle-outline':'play-circle-outline'} size={40}
           onPress = {()=>{
             setIsStopwatchStart(!isStopwatchStart);
             //setResetStopwatch(false);
@@ -239,30 +239,30 @@ const GameComponent = ({theme, vals, mode, navigation}) => {
         <GridRow id={2}/>
       </View>
       <View style={{flexDirection:'row', justifyContent: 'center'}}>
-        <RoundButton type='numeric-1-circle-outline' 
+        <RoundButton type='numeric-1-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 1);
           }}
         />
-        <RoundButton type='numeric-2-circle-outline'
+        <RoundButton type='numeric-2-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 2);
           }}
         />
-        <RoundButton type='numeric-3-circle-outline'
+        <RoundButton type='numeric-3-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 3);
           }}/>
-        <RoundButton type='numeric-4-circle-outline'
+        <RoundButton type='numeric-4-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 4);
           }}
         />
-        <RoundButton type='numeric-5-circle-outline'
+        <RoundButton type='numeric-5-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 5);
@@ -270,31 +270,31 @@ const GameComponent = ({theme, vals, mode, navigation}) => {
         />
       </View>
       <View style={{flexDirection:'row', justifyContent: 'center'}}>
-      <RoundButton type='numeric-6-circle-outline' 
+      <RoundButton type='numeric-6-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 6);
           }}
         />
-        <RoundButton type='numeric-7-circle-outline'
+        <RoundButton type='numeric-7-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 7);
           }}
         />
-        <RoundButton type='numeric-8-circle-outline'
+        <RoundButton type='numeric-8-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 8);
           }}
         />
-        <RoundButton type='numeric-9-circle-outline'
+        <RoundButton type='numeric-9-circle-outline' size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
             update(selectedX, selectedY, 9);
           }}
         />
-        <RoundButton type='arrow-collapse-left' isDelete={true}
+        <RoundButton type='arrow-collapse-left' isDelete={true} size={40}
           onPress = {()=>{
             update(selectedX, selectedY, "");
           }}

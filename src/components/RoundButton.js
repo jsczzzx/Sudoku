@@ -10,7 +10,7 @@ const RoundButton = ({theme, ...props}) => {
       }}
       icon={props.type}
       iconColor= {props.isDelete ? theme.colors.error : theme.colors.primary}
-      size={40}
+      size={props.size}
       onPress={props.onPress}
     />
   )

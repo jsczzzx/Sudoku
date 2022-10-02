@@ -7,7 +7,9 @@ import {
   Text,
   View,
   TouchableHighlight,
-  KeyboardAvoidingView
+  KeyboardAvoidingView, 
+  FlatList,
+  Switch
 } from 'react-native';
 import {List, withTheme} from 'react-native-paper';
 import Axios from 'axios';
@@ -16,72 +18,91 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Background from '../components/Background';
 import Header from '../components/Header';
 import Button from '../components/Button';
+import RoundButton from '../components/RoundButton';
 import url from '../api/ServerApi';
 
-//importing library to use Stopwatch and Timer
-
-
 const HighscoreScreen = ({theme}) => {
+  
+  const [scores, setScores] = useState([]);
+  const [userId, setUserId] = useState("sth");
+  const [isHard, setIsHard] = useState(false);
+  const [isLocal, setIsLocal] = useState(true);
 
-useEffect(() => {
-  AsyncStorage.getItem("userId").then(resp => {
-    let data = {user_id: parseInt(resp), mode: "easy"};
+
+
+  const getScores = (user_id, mode) => {
+    let data = {user_id: user_id, mode: mode};
     Axios.post(url+"/score/get_top_by_id", data).then(resp => {
-      //alert(JSON.stringify(resp));
-
+      setScores(resp.data);
     })
-  })
-}, []);
+  }
+  useEffect(() => {
+    AsyncStorage.getItem("userId").then(resp => {
+      setUserId(parseInt(resp));
+      getScores(isLocal ? parseInt(resp) : -1, isHard ? "hard" : "easy");
+    })
+  }, [isHard, isLocal]);
 
   return (
     <Background>
       <Header style={{fontSize:25}}>Highscore</Header>
-      <View  style={{width:"100%", height:"85%"}}>
-
-      <ScrollView style={{backgroundColor:'lightgrey'}}>
-       
-
-          <List.Item
-            title="First Item"
-            description="Item description"
-            left={props => <List.Icon {...props} icon="folder" />}
+      <View style={{width:"100%",flexDirection: 'row', justifyContent: 'space-around'}}>
+        <Text style={{fontWeight:'bold', fontSize:'25', color:'darkseagreen'}}>Easy</Text>
+          <Switch
+            trackColor={{ false: "gainsboro", true: "gainsboro" }}
+            thumbColor={isHard ? "crimson" : "darkseagreen"}
+            ios_backgroundColor="white"
+            onValueChange={()=>{setIsHard(!isHard)}}
+            value={isHard}
           />
-          <List.Item
-            title="First Item"
-            description="Item description"
-            left={props => <List.Icon {...props} icon="folder" />}
-          />
-                    <List.Item
-            title="First Item"
-            description="Item description"
-            left={props => <List.Icon {...props} icon="folder" />}
-          />
-          <List.Item
-            title="First Item"
-            description="Item description"
-            left={props => <List.Icon {...props} icon="folder" />}
-          />
- 
+        <Text style={{fontWeight:'bold', fontSize:'25', color:'crimson'}}>Hard</Text>
+      </View>
 
-          <List.Item
-            title="First Item"
-            description="Item description"
-            left={props => <List.Icon {...props} icon="folder" />}
-          /> 
+      <View  style={{width:"100%", height:"84%"}}>
 
-      </ScrollView>
+        <ScrollView>
+          <List.Section>
+            {scores.map((item, index) => (
+              <List.Item
+                style={{
+                  padding: 10,
+                  backgroundColor: 'gainsboro',
+                    borderRadius: 10,
+                    marginVertical: 5,
+                    borderWidth: 0,
+                  }}
+                  title={item.name+"  "+item.time+"s"}
+                  description={item.created_at}
+                  left={props => <List.Icon {...props}  icon={"numeric-"+(index+1)+"-circle"} />}
+                  //left={props => <List.Icon {...props} icon={"numeric-"+(index+1)+"-circle"} />}
+
+              />
+            ))}
+
+          </List.Section>
+
+
+        </ScrollView>
+
+
       <View style={{flexDirection:'row', justifyContent: 'space-around'}}>
       <Button 
-          style={{backgroundColor: theme.colors.secondary, width: 100}}
+          style={{backgroundColor: isLocal ?  theme.colors.secondary : "gainsboro", width: 100}}
           mode="contained" 
-          onPress={()=> navigation.navigate('Game', { mode: 'hard' })}
+          onPress={()=> {
+            //setScores(114514);
+            setIsLocal(true);
+            //setIsLoading(!isLoading);
+          }}
         >
           Local
         </Button>
         <Button 
-          style={{backgroundColor: theme.colors.secondary, width: 100}}
+          style={{backgroundColor: isLocal ? "gainsboro" : theme.colors.secondary, width: 100}}
           mode="contained" 
-          onPress={()=> navigation.navigate('Game', { mode: 'hard' })}
+          onPress={()=> {
+            setIsLocal(false);
+          }}
         >
           Global
         </Button>
