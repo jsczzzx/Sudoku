@@ -1,9 +1,9 @@
 # Super Sudoku!
 <p float="left">
-  <img width="240" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/03.PNG">
-  <img width="240" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/04.PNG">
-  <img width="240" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/05.PNG">
-  <img width="240" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/06.PNG">
+  <img width="180" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/03.PNG">
+  <img width="180" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/04.PNG">
+  <img width="180" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/05.PNG">
+  <img width="180" src="https://github.com/GodDamnGitHub/Sudoku_UIReworked/blob/master/assets/06.PNG">
 </p>
 
 
